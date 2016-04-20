@@ -1,0 +1,68 @@
+# Author : Anthony Geay (EDF R&D)
+
+# env KERNEL_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/KERNEL_V7_dev GUI_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/GUI_V7_dev YACS_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/YACS_V7_dev OTGUI_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/OTGUI_master cmake -DPYTHON_INCLUDE_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513/include/python2.7 -DPYTHON_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DPYTHONLIBS_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DPYTHONINTERP_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DCMAKE_INSTALL_PREFIX=/home/H87074/salomeV7/V7_dev/modules/src/otsalomemodule_install ../otsalomemodule
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
+
+PROJECT(SalomeOpenTURNS CXX)
+
+CMAKE_POLICY(SET CMP0003 NEW)
+
+SET(KERNEL_ROOT_DIR $ENV{KERNEL_ROOT_DIR} CACHE PATH "Path to the Salome KERNEL")
+SET(GUI_ROOT_DIR $ENV{GUI_ROOT_DIR} CACHE PATH "Path to the Salome GUI")
+SET(YACS_ROOT_DIR $ENV{YACS_ROOT_DIR} CACHE PATH "Path to the Salome YACS")
+SET(OPENTURNS_HOME $ENV{OPENTURNS_HOME} CACHE PATH "Path to OpenTURNS tool")
+SET(OTGUI_ROOT_DIR $ENV{OTGUI_ROOT_DIR} CACHE PATH "Path to the Salome YACS")
+
+LIST(APPEND CMAKE_MODULE_PATH "${KERNEL_ROOT_DIR}/salome_adm/cmake_files")
+LIST(APPEND CMAKE_MODULE_PATH "${GUI_ROOT_DIR}/adm_local/cmake_files")
+LIST(APPEND CMAKE_MODULE_PATH "${YACS_ROOT_DIR}/adm_local/cmake_files")
+LIST(APPEND CMAKE_MODULE_PATH "${OPENTURNS_HOME}/lib/cmake/openturns")
+LIST(APPEND CMAKE_MODULE_PATH "${OTGUI_ROOT_DIR}/lib/cmake/otgui")
+LIST(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")# a virer a la V2 d'otgui
+
+INCLUDE(SalomeMacros)
+INCLUDE(SalomeSetupPlatform)
+SET(BUILD_SHARED_LIBS TRUE)
+FIND_PACKAGE(SalomePythonInterp REQUIRED)
+FIND_PACKAGE(SalomePythonLibs REQUIRED)
+FIND_PACKAGE(SalomeQt4 REQUIRED COMPONENTS QtCore QtGui)
+INCLUDE(UseQt4Ext)
+FIND_PACKAGE(SalomeKERNEL)
+FIND_PACKAGE(SalomeGUI)
+FIND_PACKAGE(SalomeYACS)
+INCLUDE(OTGuiConfig)
+FIND_PACKAGE(OTGUITemp)#a virer a la V2 d'otgui
+
+SET(_moc_HEADERS
+  OTSalomeGui.hxx
+  OTViewer_ViewManager.hxx
+  )
+
+QT4_WRAP_CPP(_moc_SOURCES ${_moc_HEADERS})
+
+SET(OPENTURNS_SOURCES
+  OTSalomeGui.cxx
+  OTViewer_ViewManager.cxx
+  OTViewer_Viewer.cxx
+  ${_moc_SOURCES}
+  )
+
+INCLUDE_DIRECTORIES(
+  ${GUI_INCLUDE_DIRS}
+  ${YACS_INCLUDE_DIRS}
+  ${OTGUI_INCLUDE_DIRS}
+  )
+
+ADD_DEFINITIONS(
+  -DOTGUI_HAVE_YACS
+  ${QT_DEFINITIONS}
+  ${PYTHON_DEFINITIONS}
+  )
+
+ADD_LIBRARY(OPENTURNS ${OPENTURNS_SOURCES})
+TARGET_LINK_LIBRARIES(OPENTURNS ${GUI_LightApp} ${OTGUI_otguiview})
+INSTALL(TARGETS OPENTURNS DESTINATION lib/salome)
+
+SALOME_CONFIGURE_PREPARE(Qt4)
+ADD_SUBDIRECTORY(resources)

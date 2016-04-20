@@ -1,0 +1,15 @@
+<!DOCTYPE document>
+<document>
+ <section name="launch" >
+  <parameter name="modules" value="OPENTURNS" />
+ </section>
+ <section name="OPENTURNS" >
+  <parameter name="name" value="OpenTURNS" />
+  <parameter name="icon" value="OT.png" />
+  <parameter name="version" value="7.7.1" />
+ </section>
+ <section name="resources" >
+  <parameter name="OPENTURNS" value="%OPENTURNS_ROOT_DIR%/share/salome/resources/openturns" />
+ </section>
+</document>
+
