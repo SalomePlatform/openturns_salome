@@ -32,9 +32,11 @@ namespace OT
     void showView(bool toShow);
   public slots:
     void evalPyFile(const QString& fileName);
+    void showGraphConfigurationTabWidget(QWidget *graph);
   private:
     OTGUI::StudyTreeView *studyTree_;
     QDockWidget *_dwTree;
+    QDockWidget *configurationDock_;
     OTGUI::OTguiMdiArea *_mdiArea;
     OTGUI::YACSEvalSessionSingleton _YACSSession;
   };

@@ -19,10 +19,11 @@
 #include "otgui/OTguiMdiArea.hxx"
 
 #include <QDockWidget>
+#include <QSplitter>
 
 #include <iostream>
 
-OT::SalomeGui::SalomeGui(const QString& module_name):LightApp_Module(module_name),studyTree_(0),_dwTree(0),_mdiArea(0)
+OT::SalomeGui::SalomeGui(const QString& module_name):LightApp_Module(module_name),studyTree_(0),_dwTree(0),configurationDock_(0),_mdiArea(0)
 {
 }
 
@@ -41,10 +42,21 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   _dwTree->setVisible(false);
   _dwTree->setWindowTitle("OpenTURNS Study tree view");
   _dwTree->setObjectName("OTTreeViewDock");
+  //
+  QSplitter *leftSideSplitter(new QSplitter(Qt::Vertical));
+  leftSideSplitter->setStretchFactor(0, 8);
+  configurationDock_=new QDockWidget(tr("Graph settings"));
+  configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  //
   studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
   connect(studyTree_,SIGNAL(importPythonScript(const QString &)),this,SLOT(evalPyFile(const QString &)));
-  parent->addDockWidget(Qt::LeftDockWidgetArea, _dwTree);
-  _dwTree->setWidget(studyTree_);
+  connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), configurationDock_, SLOT(close()));
+  parent->addDockWidget(Qt::LeftDockWidgetArea,_dwTree);
+  leftSideSplitter->addWidget(studyTree_);
+  leftSideSplitter->addWidget(configurationDock_);
+  configurationDock_->close();
+  _dwTree->setWidget(leftSideSplitter);
   //
   SUIT_ResourceMgr *resMgr(SUIT_Session::session()->resourceMgr());
   enum
@@ -138,6 +150,12 @@ void OT::SalomeGui::evalPyFile(const QString& fileName)
   QString cmd(QString("execfile(\"%1\")").arg(fileName));
   cons->exec(cmd);
   std::cerr << "***************************" << std::endl;
+}
+
+void OT::SalomeGui::showGraphConfigurationTabWidget(QWidget *graph)
+{
+  configurationDock_->setWidget(graph);
+  configurationDock_->show();
 }
 
 // --- Export the module
