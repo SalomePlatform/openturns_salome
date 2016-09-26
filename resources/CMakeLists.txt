@@ -1,5 +1,6 @@
 # Author : Anthony Geay (EDF R&D)
 
+INCLUDE(UseQtExt)
 SET(_xml_files
   SalomeApp.xml
   OPENTURNSCatalog.xml
@@ -27,4 +28,4 @@ SET(_ts_files
 
 SET(OTSALOMEMODULE_RES_DIR share/salome/resources/openturns)
 INSTALL(FILES ${_res_files} DESTINATION ${OTSALOMEMODULE_RES_DIR})
-QT4_INSTALL_TS_RESOURCES("${_ts_files}" "${OTSALOMEMODULE_RES_DIR}")
+QT_INSTALL_TS_RESOURCES("${_ts_files}" "${OTSALOMEMODULE_RES_DIR}")
