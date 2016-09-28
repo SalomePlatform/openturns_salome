@@ -39,7 +39,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   SUIT_Desktop *parent(application()->desktop());
   
   _dwTree = new QDockWidget(parent);
-  _dwTree->setVisible(false);
+  _dwTree->setVisible(true);
   _dwTree->setWindowTitle("OpenTURNS Study tree view");
   _dwTree->setObjectName("OTTreeViewDock");
   //
