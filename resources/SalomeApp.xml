@@ -6,10 +6,15 @@
  <section name="OPENTURNS" >
   <parameter name="name" value="OpenTURNS" />
   <parameter name="icon" value="OT.png" />
-  <parameter name="version" value="7.7.1" />
+  <parameter name="version" value="8.1.0" />
+  <parameter name="documentation" value="OPENTURNS_help"/>
  </section>
  <section name="resources" >
   <parameter name="OPENTURNS" value="%OPENTURNS_ROOT_DIR%/share/salome/resources/openturns" />
+ </section>
+ <section name="OPENTURNS_help">
+    <parameter name="sub_menu"     value="%1 module"/>
+    <parameter name="OTGUI User's Guide" value="%OTGUI_DIR%/share/otgui/doc/html/index.html"/>
  </section>
 </document>
 
