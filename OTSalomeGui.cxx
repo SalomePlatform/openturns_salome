@@ -17,6 +17,7 @@
 #include "otgui/OTguiToolBar.hxx"
 #include "otgui/OTguiStatusBar.hxx"
 #include "otgui/OTguiMdiArea.hxx"
+#include "otgui/WelcomeWindow.hxx"
 
 #include <QDockWidget>
 #include <QSplitter>
@@ -93,6 +94,16 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), _mdiArea, SLOT(showSubWindow(QMdiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), _mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), _mdiArea, SLOT(removeSubWindow(QStandardItem *)));
+
+  // welcome page
+  OTGUI::WelcomeWindow * welcomeWindow = new OTGUI::WelcomeWindow;
+  leftSideSplitter->insertWidget(0,welcomeWindow);
+  connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
+  connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
+  connect(welcomeWindow, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+
+  connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
+  connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), _mdiArea, SLOT(setHidden(bool)));
 }
 
 void OT::SalomeGui::windows(QMap<int, int>& aMap) const
