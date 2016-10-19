@@ -52,7 +52,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
   connect(studyTree_,SIGNAL(importPythonScript(const QString &)),this,SLOT(evalPyFile(const QString &)));
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(graphWindowDeactivated(QWidget*)), configurationDock_, SLOT(close()));
+  connect(studyTree_, SIGNAL(graphWindowDeactivated()), configurationDock_, SLOT(close()));
   parent->addDockWidget(Qt::LeftDockWidgetArea,_dwTree);
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->addWidget(configurationDock_);
