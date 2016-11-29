@@ -21,6 +21,9 @@
 
 #include <QDockWidget>
 #include <QSplitter>
+#include <QFileDialog>
+#include <QSettings>
+#include <QMessageBox>
 
 #include <iostream>
 
@@ -50,7 +53,6 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   //
   studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
-  connect(studyTree_,SIGNAL(importPythonScript(const QString &)),this,SLOT(evalPyFile(const QString &)));
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
   connect(studyTree_, SIGNAL(graphWindowDeactivated()), configurationDock_, SLOT(close()));
   parent->addDockWidget(Qt::LeftDockWidgetArea,_dwTree);
@@ -79,7 +81,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   createAction(agSaveAsStudy,tr("TOP_SAVEAS_STUDY"),resMgr->loadPixmap("OPENTURNS","document-save-as.png"),
                tr("MEN_SAVEAS_STUDY"),tr("STB_SAVEAS_STUDY"),0,parent,false,studyTree_,SLOT(saveAsOTStudy()));
   createAction(agImportPy,tr("TOP_IMPORT_PY"),resMgr->loadPixmap("OPENTURNS","document-import.png"),
-               tr("MEN_IMPORT_PY"),tr("STB_IMPORT_PY"),0,parent,false,studyTree_,SLOT(importPython()));
+               tr("MEN_IMPORT_PY"),tr("STB_IMPORT_PY"),0,parent,false,this,SLOT(importPython()));
   createAction(agExportPy,tr("TOP_EXPORT_PY"),resMgr->loadPixmap("OPENTURNS","document-export.png"),
                tr("MEN_EXPORT_PY"),tr("STB_EXPORT_PY"),0,parent,false,studyTree_,SLOT(exportPython()));
   //
@@ -91,7 +93,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
       createTool(i,tbId);
     }
   _mdiArea=new OTGUI::OTguiMdiArea;
-  connect(studyTree_, SIGNAL(showWindow(QMdiSubWindow *)), _mdiArea, SLOT(showSubWindow(QMdiSubWindow *)));
+  connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), _mdiArea, SLOT(showSubWindow(OTguiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), _mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), _mdiArea, SLOT(removeSubWindow(QStandardItem *)));
 
@@ -100,7 +102,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   leftSideSplitter->insertWidget(0,welcomeWindow);
   connect(welcomeWindow, SIGNAL(createNewOTStudy()), studyTree_, SLOT(createNewOTStudy()));
   connect(welcomeWindow, SIGNAL(openOTStudy()), studyTree_, SLOT(openOTStudy()));
-  connect(welcomeWindow, SIGNAL(importPython()), studyTree_, SLOT(importPython()));
+  connect(welcomeWindow, SIGNAL(importPython()), this, SLOT(importPython()));
 
   connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
   connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), _mdiArea, SLOT(setHidden(bool)));
@@ -161,6 +163,50 @@ void OT::SalomeGui::evalPyFile(const QString& fileName)
   QString cmd(QString("execfile(\"%1\")").arg(fileName));
   cons->exec(cmd);
   std::cerr << "***************************" << std::endl;
+}
+
+void OT::SalomeGui::importPython()
+{
+  if (studyTree_->model()->rowCount())
+  {
+    int ret = QMessageBox::warning(NULL, tr("Warning"),
+                                   tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
+                                   QMessageBox::Cancel | QMessageBox::Ok,
+                                   QMessageBox::Ok);
+    if (ret == QMessageBox::Ok)
+    {
+      bool allStudiesClosed = studyTree_->closeAllOTStudies();
+      if (!allStudiesClosed)
+        return;
+    }
+    else
+      return;
+  }
+
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
+  const QString fileName = QFileDialog::getOpenFileName(NULL, tr("Import Python..."),
+                           currentDir,
+                           tr("Python source files (*.py)"));
+
+  if (!fileName.isEmpty())
+  {
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::ReadOnly))
+    {
+      QMessageBox::warning(NULL, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
+    // load
+    {
+      evalPyFile(fileName);
+    }
+  }
 }
 
 void OT::SalomeGui::showGraphConfigurationTabWidget(QWidget *graph)
