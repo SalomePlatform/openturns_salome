@@ -33,6 +33,7 @@ namespace OT
   public slots:
     void evalPyFile(const QString& fileName);
     void showGraphConfigurationTabWidget(QWidget *graph);
+    void importPython();
   private:
     OTGUI::StudyTreeView *studyTree_;
     QDockWidget *_dwTree;
