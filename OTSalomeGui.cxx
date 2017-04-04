@@ -13,9 +13,9 @@
 #include "LightApp_Application.h"
 
 #include "otgui/StudyTreeView.hxx"
-#include "otgui/OTguiMenuBar.hxx"
-#include "otgui/OTguiToolBar.hxx"
-#include "otgui/OTguiStatusBar.hxx"
+//#include "otgui/OTguiMenuBar.hxx"
+//#include "otgui/OTguiToolBar.hxx"
+//#include "otgui/OTguiStatusBar.hxx"
 #include "otgui/OTguiMdiArea.hxx"
 #include "otgui/WelcomeWindow.hxx"
 
@@ -49,16 +49,25 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   //
   QSplitter *leftSideSplitter(new QSplitter(Qt::Vertical));
   leftSideSplitter->setStretchFactor(0, 8);
+  studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
+  
+  dockControllerWidget_ = new QDockWidget(tr("Current analysis"));
+  dockControllerWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
+  connect(studyTree_, SIGNAL(showControllerWidget(QWidget*)), this, SLOT(showControllerWidget(QWidget*)));
+  connect(studyTree_, SIGNAL(analysisFinished()), dockControllerWidget_, SLOT(close()));
+  leftSideSplitter->setStretchFactor(1, 2);
+  
   configurationDock_=new QDockWidget(tr("Graph settings"));
   configurationDock_->setFeatures(QDockWidget::NoDockWidgetFeatures);
   //
-  studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
   connect(studyTree_, SIGNAL(graphWindowActivated(QWidget*)), this, SLOT(showGraphConfigurationTabWidget(QWidget*)));
   connect(studyTree_, SIGNAL(graphWindowDeactivated()), configurationDock_, SLOT(close()));
   parent->addDockWidget(Qt::LeftDockWidgetArea,_dwTree);
   leftSideSplitter->addWidget(studyTree_);
   leftSideSplitter->addWidget(configurationDock_);
+  leftSideSplitter->addWidget(dockControllerWidget_);
   configurationDock_->close();
+  dockControllerWidget_->close();
   _dwTree->setWidget(leftSideSplitter);
   //
   SUIT_ResourceMgr *resMgr(SUIT_Session::session()->resourceMgr());
@@ -213,6 +222,13 @@ void OT::SalomeGui::showGraphConfigurationTabWidget(QWidget *graph)
 {
   configurationDock_->setWidget(graph);
   configurationDock_->show();
+}
+
+void OT::SalomeGui::showControllerWidget(QWidget* widget)
+{
+  dockControllerWidget_->setWidget(widget);
+  dockControllerWidget_->show();
+  configurationDock_->close();
 }
 
 // --- Export the module

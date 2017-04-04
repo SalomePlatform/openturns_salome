@@ -33,11 +33,13 @@ namespace OT
   public slots:
     void evalPyFile(const QString& fileName);
     void showGraphConfigurationTabWidget(QWidget *graph);
+    void showControllerWidget(QWidget *widget);
     void importPython();
   private:
     OTGUI::StudyTreeView *studyTree_;
     QDockWidget *_dwTree;
     QDockWidget *configurationDock_;
+    QDockWidget* dockControllerWidget_;
     OTGUI::OTguiMdiArea *_mdiArea;
     OTGUI::YACSEvalSessionSingleton _YACSSession;
   };
