@@ -15,5 +15,4 @@ OTViewer_ViewManager::OTViewer_ViewManager( SUIT_Study* study, SUIT_Desktop* des
 
 void OTViewer_ViewManager::onWindowActivated(SUIT_ViewWindow *view)
 {
-  std::cerr << "onWindowActivated" << std::endl;
 }

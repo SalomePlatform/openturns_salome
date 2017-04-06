@@ -5,8 +5,6 @@
 
 #include "LightApp_Module.h"
 
-#include "otgui/YACSEvalSessionSingleton.hxx"
-
 #include <QObject>
 
 namespace OTGUI
@@ -41,7 +39,6 @@ namespace OT
     QDockWidget *configurationDock_;
     QDockWidget* dockControllerWidget_;
     OTGUI::OTguiMdiArea *_mdiArea;
-    OTGUI::YACSEvalSessionSingleton _YACSSession;
   };
 }
 

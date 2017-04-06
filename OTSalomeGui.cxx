@@ -18,6 +18,7 @@
 //#include "otgui/OTguiStatusBar.hxx"
 #include "otgui/OTguiMdiArea.hxx"
 #include "otgui/WelcomeWindow.hxx"
+#include "otgui/YACSEvalSessionSingleton.hxx"
 
 #include <QDockWidget>
 #include <QSplitter>
