@@ -87,7 +87,7 @@
     </message>
     <message>
       <source>OTVIEWER_TITLE</source>
-      <translation>OT MDI zone</translation>
+      <translation>OpenTURNS</translation>
     </message>
 </context>
 </TS>
