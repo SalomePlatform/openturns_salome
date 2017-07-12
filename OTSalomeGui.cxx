@@ -50,7 +50,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   //
   QSplitter *leftSideSplitter(new QSplitter(Qt::Vertical));
   leftSideSplitter->setStretchFactor(0, 8);
-  studyTree_=new OTGUI::StudyTreeView(0);//_dwTree
+  studyTree_=new OTGUI::StudyTreeView(parent);//_dwTree
   
   dockControllerWidget_ = new QDockWidget(tr("Current analysis"));
   dockControllerWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
@@ -102,7 +102,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
       createMenu(i,fileMnu,10);
       createTool(i,tbId);
     }
-  _mdiArea=new OTGUI::OTguiMdiArea;
+  _mdiArea=new OTGUI::OTguiMdiArea(parent);
   connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), _mdiArea, SLOT(showSubWindow(OTguiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), _mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), _mdiArea, SLOT(removeSubWindow(QStandardItem *)));
