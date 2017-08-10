@@ -33,12 +33,14 @@ namespace OT
     void showGraphConfigurationTabWidget(QWidget *graph);
     void showControllerWidget(QWidget *widget);
     void importPython();
+    void updateActionsAvailability(bool analysisInProgress);
   private:
     OTGUI::StudyTreeView *studyTree_;
     QDockWidget *_dwTree;
     QDockWidget *configurationDock_;
     QDockWidget* dockControllerWidget_;
     OTGUI::OTguiMdiArea *_mdiArea;
+    QAction* _importPythonAction;
   };
 }
 

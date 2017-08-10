@@ -54,8 +54,6 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   
   dockControllerWidget_ = new QDockWidget(tr("Current analysis"));
   dockControllerWidget_->setFeatures(QDockWidget::NoDockWidgetFeatures);
-  connect(studyTree_, SIGNAL(showControllerWidget(QWidget*)), this, SLOT(showControllerWidget(QWidget*)));
-  connect(studyTree_, SIGNAL(analysisFinished()), dockControllerWidget_, SLOT(close()));
   leftSideSplitter->setStretchFactor(1, 2);
   
   configurationDock_=new QDockWidget(tr("Graph settings"));
@@ -79,7 +77,6 @@ void OT::SalomeGui::initialize(CAM_Application *app)
     agSaveStudy,
     agSaveAsStudy,
     agImportPy,
-    agExportPy,
     agCount
   };
   createAction(agCreateStudy,tr("TOP_CREATE_STUDY"),resMgr->loadPixmap("OPENTURNS","document-new22x22.png"),
@@ -87,13 +84,13 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   createAction(agOpenStudy,tr("TOP_OPEN_STUDY"),resMgr->loadPixmap("OPENTURNS","document-open.png"),
                tr("MEN_OPEN_STUDY"),tr("STB_OPEN_STUDY"),0,parent,false,studyTree_,SLOT(openOTStudy()));
   createAction(agSaveStudy,tr("TOP_SAVE_STUDY"),resMgr->loadPixmap("OPENTURNS","document-save.png"),
-               tr("MEN_SAVE_STUDY"),tr("STB_SAVE_STUDY"),0,parent,false,studyTree_,SLOT(saveOTStudy()));
+               tr("MEN_SAVE_STUDY"),tr("STB_SAVE_STUDY"),0,parent,false,studyTree_,SLOT(saveCurrentOTStudy()));
   createAction(agSaveAsStudy,tr("TOP_SAVEAS_STUDY"),resMgr->loadPixmap("OPENTURNS","document-save-as.png"),
-               tr("MEN_SAVEAS_STUDY"),tr("STB_SAVEAS_STUDY"),0,parent,false,studyTree_,SLOT(saveAsOTStudy()));
-  createAction(agImportPy,tr("TOP_IMPORT_PY"),resMgr->loadPixmap("OPENTURNS","document-import.png"),
-               tr("MEN_IMPORT_PY"),tr("STB_IMPORT_PY"),0,parent,false,this,SLOT(importPython()));
-  createAction(agExportPy,tr("TOP_EXPORT_PY"),resMgr->loadPixmap("OPENTURNS","document-export.png"),
-               tr("MEN_EXPORT_PY"),tr("STB_EXPORT_PY"),0,parent,false,studyTree_,SLOT(exportPython()));
+               tr("MEN_SAVEAS_STUDY"),tr("STB_SAVEAS_STUDY"),0,parent,false,studyTree_,SLOT(saveAsCurrentOTStudy()));
+  _importPythonAction = createAction(agImportPy,tr("TOP_IMPORT_PY"),
+                          resMgr->loadPixmap("OPENTURNS","document-import.png"),
+                          tr("MEN_IMPORT_PY"),tr("STB_IMPORT_PY"),0,parent,
+                          false,this,SLOT(importPython()));
   //
   int fileMnu(createMenu(tr("MEN_OT_FILE"),-1,-1,50));
   int tbId(createTool(tr("MEN_OT_FILE"),QString("Ot")));
@@ -106,6 +103,8 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   connect(studyTree_, SIGNAL(showWindow(OTguiSubWindow *)), _mdiArea, SLOT(showSubWindow(OTguiSubWindow *)));
   connect(studyTree_, SIGNAL(itemSelected(QStandardItem*)), _mdiArea, SLOT(showSubWindow(QStandardItem *)));
   connect(studyTree_, SIGNAL(removeSubWindow(QStandardItem *)), _mdiArea, SLOT(removeSubWindow(QStandardItem *)));
+  connect(studyTree_, SIGNAL(analysisInProgressStatusChanged(bool)),
+          this,       SLOT(updateActionsAvailability(bool)));
 
   // welcome page
   OTGUI::WelcomeWindow * welcomeWindow = new OTGUI::WelcomeWindow;
@@ -116,6 +115,11 @@ void OT::SalomeGui::initialize(CAM_Application *app)
 
   connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), welcomeWindow, SLOT(setVisible(bool)));
   connect(_mdiArea, SIGNAL(mdiAreaEmpty(bool)), _mdiArea, SLOT(setHidden(bool)));
+}
+
+void OT::SalomeGui::updateActionsAvailability(bool analysisInProgress)
+{
+  _importPythonAction->setDisabled(analysisInProgress);
 }
 
 void OT::SalomeGui::windows(QMap<int, int>& aMap) const
