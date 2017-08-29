@@ -14,8 +14,11 @@
 #include "PVViewer_InitSingleton.h"
 #include "PVViewer_ViewModel.h"
 
-#include "otgui/YACSEvalSessionSingleton.hxx"
+#include <otgui/YACSEvalSessionSingleton.hxx>
 #include <otgui/MainWidget.hxx>
+#include <otgui/PVServerManagerSingleton.hxx>
+
+#include "OTPVServerManager.hxx"
 
 #include <QtWidgets>
 #include <QDockWidget>
@@ -43,7 +46,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   yacsSession->launchUsingCurrentSession();
   SUIT_Desktop *parent(application()->desktop());
   PVViewer_InitSingleton::Init(parent, app2->logWindow());
-  
+  OTGUI::PVServerManagerSingleton::Init(new OTPVServerManager());
   _mainWindow = new OTGUI::MainWidget(parent);
   _mainWindow->setWindowTitle("OpenTURNS window");
 

@@ -60,6 +60,7 @@ SET(OPENTURNS_SOURCES
   OTSalomeGui.cxx
   OTViewer_ViewManager.cxx
   OTViewer_Viewer.cxx
+  OTPVServerManager.cxx
   ${_moc_SOURCES}
   )
 
