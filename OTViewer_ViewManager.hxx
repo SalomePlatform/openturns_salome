@@ -5,16 +5,11 @@
 
 #include "SUIT_ViewManager.h"
 
-namespace OTGUI
-{
-  class OTguiMdiArea;
-}
-
 class OTViewer_ViewManager : public SUIT_ViewManager
 {
   Q_OBJECT
 public:
-  OTViewer_ViewManager( SUIT_Study*, SUIT_Desktop*, OTGUI::OTguiMdiArea *mdiArea);
+  OTViewer_ViewManager( SUIT_Study*, SUIT_Desktop*, QWidget *mdiArea);
   ~OTViewer_ViewManager() { }
 protected slots:
   void onWindowActivated(SUIT_ViewWindow*);

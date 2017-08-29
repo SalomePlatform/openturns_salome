@@ -7,10 +7,10 @@
 
 #include <QObject>
 
+
 namespace OTGUI
 {
-  class StudyTreeView;
-  class OTguiMdiArea;
+  class MainWidget;
 }
 
 class QDockWidget;
@@ -26,21 +26,11 @@ namespace OT
     void windows(QMap<int, int>& aMap) const;
     bool activateModule(SUIT_Study *study);
     bool deactivateModule(SUIT_Study *study);
+
   private:
     void showView(bool toShow);
-  public slots:
-    void evalPyFile(const QString& fileName);
-    void showGraphConfigurationTabWidget(QWidget *graph);
-    void showControllerWidget(QWidget *widget);
-    void importPython();
-    void updateActionsAvailability(bool analysisInProgress);
   private:
-    OTGUI::StudyTreeView *studyTree_;
-    QDockWidget *_dwTree;
-    QDockWidget *configurationDock_;
-    QDockWidget* dockControllerWidget_;
-    OTGUI::OTguiMdiArea *_mdiArea;
-    QAction* _importPythonAction;
+    OTGUI::MainWidget * _mainWindow;
   };
 }
 

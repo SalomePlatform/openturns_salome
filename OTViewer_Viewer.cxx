@@ -2,9 +2,13 @@
 
 #include "OTViewer_Viewer.hxx"
 
-#include "otgui/OTguiMdiArea.hxx"
-
-OTViewer_ViewWindow::OTViewer_ViewWindow(SUIT_Desktop *theDesktop, OTViewer_Viewer *theModel,OTGUI::OTguiMdiArea *mdiArea):SUIT_ViewWindow(theDesktop),myDesktop(theDesktop),myModel(theModel),_mdiArea(mdiArea)
+OTViewer_ViewWindow::OTViewer_ViewWindow(SUIT_Desktop *theDesktop,
+                                         OTViewer_Viewer *theModel,
+                                         QWidget *mdiArea)
+: SUIT_ViewWindow(theDesktop)
+  ,myDesktop(theDesktop)
+  ,myModel(theModel)
+  ,_mdiArea(mdiArea)
 {
   setViewManager(myModel->getViewManager());
   setCentralWidget(mdiArea);
@@ -16,7 +20,8 @@ OTViewer_ViewWindow::~OTViewer_ViewWindow()
   setCentralWidget(0);
 }
 
-OTViewer_Viewer::OTViewer_Viewer(OTGUI::OTguiMdiArea *mdiArea):_mdiArea(mdiArea)
+OTViewer_Viewer::OTViewer_Viewer(QWidget *mdiArea)
+: _mdiArea(mdiArea)
 {
 }
 
