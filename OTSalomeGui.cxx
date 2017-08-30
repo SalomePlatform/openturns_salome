@@ -47,32 +47,33 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   SUIT_Desktop *parent(application()->desktop());
   PVViewer_InitSingleton::Init(parent, app2->logWindow());
   OTGUI::PVServerManagerSingleton::Init(new OTPVServerManager());
+
   _mainWindow = new OTGUI::MainWidget(parent);
   _mainWindow->setWindowTitle("OpenTURNS window");
 
-  int fileMnu(createMenu(tr("MEN_OT_FILE"),-1,-1,50));
-  int tbId(createTool(tr("MEN_OT_FILE"),QString("Ot")));
+  int fileMnu(createMenu("OpenTURNS",-1,-1,10));
+  int tbId(createTool(tr("OpenTURNS Toolbar"),QString("OtToolbar")));
   OTGUI::OTguiActions* actions = _mainWindow->getActions();
-  int idx = 0;
-  createMenu(actions->newAction(),idx,fileMnu,10);
-  createTool(actions->newAction(),idx,tbId);
-  idx++;
 
-  createMenu(actions->openAction(),idx,fileMnu,10);
-  createTool(actions->openAction(),idx,tbId);
-  idx++;
+  createMenu(actions->newAction(),fileMnu);
+  createTool(actions->newAction(),tbId);
 
-  createMenu(actions->saveAction(),idx,fileMnu,10);
-  createTool(actions->saveAction(),idx,tbId);
-  idx++;
+  createMenu(actions->openAction(),fileMnu);
+  createTool(actions->openAction(),tbId);
 
-  createMenu(actions->saveAsAction(),idx,fileMnu,10);
-  createTool(actions->saveAsAction(),idx,tbId);
-  idx++;
+  createMenu(actions->saveAction(),fileMnu);
+  createTool(actions->saveAction(),tbId);
 
-  createMenu(actions->importPyAction(),idx,fileMnu,10);
-  createTool(actions->importPyAction(),idx,tbId);
-  idx++;
+  createMenu(actions->saveAsAction(),fileMnu);
+  createTool(actions->saveAsAction(),tbId);
+
+  createMenu(actions->importPyAction(),fileMnu);
+  createTool(actions->importPyAction(),tbId);
+
+  connect(actions->importPyAction(), SIGNAL(triggered()),
+          this, SLOT(importPython()));
+  connect(_mainWindow->getMdiArea(), SIGNAL(errorMessageChanged(QString)),
+          this, SLOT(showMessage(QString)));
 }
 
 void OT::SalomeGui::windows(QMap<int, int>& aMap) const
@@ -126,6 +127,87 @@ void OT::SalomeGui::showView(bool toShow)
   pvWnd->setVisible( toShow );
   if(toShow)
     pvWnd->setFocus();
+}
+
+void OT::SalomeGui::evalPyFile(const QString& fileName)
+{
+  LightApp_Application *anApp(getApp());
+  if(!anApp)
+    return;
+  PyConsole_Console *cons(anApp->pythonConsole(false));
+  if(!cons)
+    return;
+  QString cmd(QString("execfile(\"%1\")").arg(fileName));
+  cons->exec(cmd);
+}
+
+void OT::SalomeGui::importPython()
+{
+  OTGUI::StudyTreeView * studyTree = _mainWindow->getStudyTree();
+  if (studyTree->model()->rowCount())
+  {
+    int ret = QMessageBox::warning(NULL, tr("Warning"),
+                                   tr("Cannot import a Python script when other studies are opened.\nDo you want to continue and close the other studies?"),
+                                   QMessageBox::Cancel | QMessageBox::Ok,
+                                   QMessageBox::Ok);
+    if (ret == QMessageBox::Ok)
+    {
+      bool allStudiesClosed = studyTree->closeAllOTStudies();
+      if (!allStudiesClosed)
+        return;
+    }
+    else
+      return;
+  }
+
+  QSettings settings;
+  QString currentDir = settings.value("currentDir").toString();
+  if (currentDir.isEmpty())
+    currentDir = QDir::homePath();
+  const QString fileName = QFileDialog::getOpenFileName(NULL, tr("Import Python..."),
+                           currentDir,
+                           tr("Python source files (*.py)"));
+
+  if (!fileName.isEmpty())
+  {
+    QFile file(fileName);
+    settings.setValue("currentDir", QFileInfo(fileName).absolutePath());
+
+    // check
+    if (!file.open(QFile::ReadOnly))
+    {
+      QMessageBox::warning(NULL, tr("Warning"),
+                           tr("Cannot read file %1:\n%2").arg(fileName).arg(file.errorString()));
+    }
+    // load
+    {
+      evalPyFile(fileName);
+    }
+  }
+}
+
+void OT::SalomeGui::showMessage(const QString & message)
+{
+  // ignore text between <>
+  QString rawMessage;
+  QString::const_iterator it;
+  bool pass = false;
+  for(it = message.begin(); it != message.end(); it++)
+  {
+    if(pass)
+    {
+      if( *it == '>')
+        pass = false;
+    }
+    else
+    {
+      if( *it == '<')
+        pass = true;
+      else
+        rawMessage.append(*it);
+    }
+  }
+  application()->desktop()->statusBar()->showMessage(rawMessage);
 }
 
 // --- Export the module

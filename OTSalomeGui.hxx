@@ -27,6 +27,11 @@ namespace OT
     bool activateModule(SUIT_Study *study);
     bool deactivateModule(SUIT_Study *study);
 
+  public slots:
+    void evalPyFile(const QString& fileName);
+    void importPython();
+    void showMessage(const QString & message);
+
   private:
     void showView(bool toShow);
   private:
