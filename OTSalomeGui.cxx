@@ -57,18 +57,23 @@ void OT::SalomeGui::initialize(CAM_Application *app)
 
   createMenu(actions->newAction(),fileMnu);
   createTool(actions->newAction(),tbId);
+  actions->newAction()->setShortcut(QKeySequence()); // remove OTGUI shortcut
 
   createMenu(actions->openAction(),fileMnu);
   createTool(actions->openAction(),tbId);
+  actions->openAction()->setShortcut(QKeySequence());
 
   createMenu(actions->saveAction(),fileMnu);
   createTool(actions->saveAction(),tbId);
+  actions->saveAction()->setShortcut(QKeySequence());
 
   createMenu(actions->saveAsAction(),fileMnu);
   createTool(actions->saveAsAction(),tbId);
+  actions->saveAsAction()->setShortcut(QKeySequence());
 
   createMenu(actions->importPyAction(),fileMnu);
   createTool(actions->importPyAction(),tbId);
+  actions->importPyAction()->setShortcut(QKeySequence());
 
   connect(actions->importPyAction(), SIGNAL(triggered()),
           this, SLOT(importPython()));
