@@ -110,6 +110,15 @@ bool OT::SalomeGui::deactivateModule(SUIT_Study *study)
 {
   setMenuShown(false);
   setToolShown(false);
+  //
+  LightApp_Application* app(dynamic_cast< LightApp_Application* >( SUIT_Session::session()->activeApplication() ));
+  if( !app )
+    return false;
+  SUIT_ViewManager *aViewManager(app->getViewManager(OTViewer_Viewer::Type(),false)); // create if necessary
+  if(!aViewManager)
+    return false;
+  aViewManager->setShown(false);
+  //
   return LightApp_Module::deactivateModule(study);
 }
 
