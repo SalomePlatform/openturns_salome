@@ -11,6 +11,7 @@
 namespace OTGUI
 {
   class MainWidget;
+  class StudyManager;
 }
 
 class QDockWidget;
@@ -29,13 +30,13 @@ namespace OT
 
   public slots:
     void evalPyFile(const QString& fileName);
-    void importPython();
     void showMessage(const QString & message);
 
   private:
     void showView(bool toShow);
   private:
     OTGUI::MainWidget * _mainWindow;
+    OTGUI::StudyManager * _manager;
   };
 }
 
