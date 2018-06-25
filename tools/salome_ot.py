@@ -20,9 +20,7 @@
 #
 import os
 import py2yacs
-import salome
 import SalomePyQt
-import openturns as ot
 import otguibase
 
 def loadYacsPyStudy(pyFile,
