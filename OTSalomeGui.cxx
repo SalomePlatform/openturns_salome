@@ -45,7 +45,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   YACSEvalSession *yacsSession(OTGUI::YACSEvalSessionSingleton::Get());
   yacsSession->launchUsingCurrentSession();
   SUIT_Desktop *parent(application()->desktop());
-  PVViewer_InitSingleton::Init(parent, app2->logWindow());
+  PVViewer_InitSingleton::Init(parent);
   OTGUI::PVServerManagerSingleton::Init(new OTPVServerManager());
 
   _mainWindow = new OTGUI::MainWidget(parent);
