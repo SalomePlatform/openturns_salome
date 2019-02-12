@@ -6,7 +6,7 @@
  <section name="OPENTURNS" >
   <parameter name="name" value="OpenTURNS" />
   <parameter name="icon" value="OT.png" />
-  <parameter name="version" value="9.2.0" />
+  <parameter name="version" value="9.3.0" />
   <parameter name="documentation" value="OPENTURNS_help"/>
  </section>
  <section name="resources" >

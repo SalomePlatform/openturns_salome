@@ -58,7 +58,7 @@ void OT::SalomeGui::initialize(CAM_Application *app)
 
   int fileMnu(createMenu("OpenTURNS",-1,-1,10));
   int tbId(createTool(tr("OpenTURNS Toolbar"),QString("OtToolbar")));
-  OTGUI::OTguiActions* actions = _mainWindow->getActions();
+  OTGUI::Actions* actions = _mainWindow->getActions();
 
   createMenu(actions->newAction(),fileMnu);
   createTool(actions->newAction(),tbId);
@@ -79,9 +79,6 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   createMenu(actions->importPyAction(),fileMnu);
   createTool(actions->importPyAction(),tbId);
   actions->importPyAction()->setShortcut(QKeySequence());
-
-  connect(_mainWindow->getMdiArea(), SIGNAL(errorMessageChanged(QString)),
-          this, SLOT(showMessage(QString)));
 }
 
 void OT::SalomeGui::windows(QMap<int, int>& aMap) const
