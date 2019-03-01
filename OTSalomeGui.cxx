@@ -14,7 +14,6 @@
 #include "PVViewer_InitSingleton.h"
 #include "PVViewer_ViewModel.h"
 
-#include <otgui/YACSEvalSessionSingleton.hxx>
 #include <otgui/StudyManager.hxx>
 #include <otgui/PVServerManagerSingleton.hxx>
 
@@ -42,8 +41,6 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   if( !app2 )
     return;
 
-  YACSEvalSession *yacsSession(OTGUI::YACSEvalSessionSingleton::Get());
-  yacsSession->launchUsingCurrentSession();
   SUIT_Desktop *parent(application()->desktop());
   PVViewer_InitSingleton::Init(parent);
   OTGUI::PVServerManagerSingleton::Init(new OTPVServerManager());

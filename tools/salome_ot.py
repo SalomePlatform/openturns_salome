@@ -34,10 +34,12 @@ def loadYacsPyStudy(pyFile,
     yacs_file = os.path.join(os.path.dirname(pyFile), "yacs.xml")
   errors = py2yacs.main(pyFile, yacs_file)
   if not errors:
+    with open(pyFile, 'r') as f:
+      file_text = f.read()
     sgPyQt = SalomePyQt.SalomePyQt()
     sgPyQt.activateModule("OpenTURNS")
-    otStudy = otguibase.OTStudy(study_name)
-    otguibase.OTStudy.Add(otStudy)
-    physicalModel = otguibase.YACSPhysicalModel(model_name, yacs_file)
+    otStudy = otguibase.Study(study_name)
+    otguibase.Study.Add(otStudy)
+    physicalModel = otguibase.YACSPhysicalModel(model_name, file_text)
     otStudy.add(physicalModel)
   return errors
