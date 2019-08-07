@@ -8,7 +8,7 @@
 #include <QObject>
 
 
-namespace OTGUI
+namespace PERSALYS
 {
   class MainWidget;
   class StudyManager;
@@ -35,8 +35,8 @@ namespace OT
   private:
     void showView(bool toShow);
   private:
-    OTGUI::MainWidget * _mainWindow;
-    OTGUI::StudyManager * _manager;
+    PERSALYS::MainWidget * _mainWindow;
+    PERSALYS::StudyManager * _manager;
   };
 }
 

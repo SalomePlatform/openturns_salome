@@ -1,9 +1,9 @@
 #ifndef PVSERVERMANAGEROT_H
 #define PVSERVERMANAGEROT_H
 
-#include <otgui/PVServerManagerInterface.hxx>
+#include <persalys/PVServerManagerInterface.hxx>
 
-class OTPVServerManager : public OTGUI::PVServerManagerInterface
+class OTPVServerManager : public PERSALYS::PVServerManagerInterface
 {
 public:
   virtual pqServer* fetchServer(bool *isRemote=0);

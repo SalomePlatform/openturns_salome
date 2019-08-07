@@ -1,7 +1,5 @@
 # Author : Anthony Geay (EDF R&D)
 
-# env KERNEL_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/KERNEL_V7_dev GUI_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/GUI_V7_dev YACS_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/YACS_V7_dev OTGUI_ROOT_DIR=/home/H87074/salomeV7/V7_dev/modules/install/OTGUI_master cmake -DPYTHON_INCLUDE_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513/include/python2.7 -DPYTHON_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DPYTHONLIBS_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DPYTHONINTERP_ROOT_DIR=/home/H87074/salomeV7/prerequisites/install/Python-2710-tcl8513-tk8513 -DCMAKE_INSTALL_PREFIX=/home/H87074/salomeV7/V7_dev/modules/src/otsalomemodule_install ../otsalomemodule
-
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
 
 PROJECT(SalomeOpenTURNS CXX)
@@ -26,8 +24,7 @@ LIST(APPEND CMAKE_MODULE_PATH "${KERNEL_ROOT_DIR}/salome_adm/cmake_files")
 LIST(APPEND CMAKE_MODULE_PATH "${GUI_ROOT_DIR}/adm_local/cmake_files")
 LIST(APPEND CMAKE_MODULE_PATH "${YACS_ROOT_DIR}/adm/cmake")
 LIST(APPEND CMAKE_MODULE_PATH "${OPENTURNS_HOME}/lib/cmake/openturns")
-LIST(APPEND CMAKE_MODULE_PATH "${OTGUI_ROOT_DIR}/lib/cmake/otgui")
-LIST(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")# a virer a la V2 d'otgui
+LIST(APPEND CMAKE_MODULE_PATH "${OTGUI_ROOT_DIR}/lib/cmake/persalys")
 
 INCLUDE(SalomeSetupPlatform)
 SET(BUILD_SHARED_LIBS TRUE)
@@ -36,8 +33,8 @@ FIND_PACKAGE(SalomePythonLibs REQUIRED)
 FIND_PACKAGE(SalomeKERNEL)
 FIND_PACKAGE(SalomeGUI)
 FIND_PACKAGE(SalomeYACS)
-INCLUDE(OTGuiConfig)
-FIND_PACKAGE(OTGUITemp)#a virer a la V2 d'otgui
+INCLUDE(PersalysConfig)
+FIND_PACKAGE(Persalys)
 FIND_PACKAGE(SalomeQt5 REQUIRED)
 
 SET(_moc_HEADERS
@@ -58,7 +55,7 @@ SET(OPENTURNS_SOURCES
 INCLUDE_DIRECTORIES(
   ${GUI_INCLUDE_DIRS}
   ${YACS_INCLUDE_DIRS}
-  ${OTGUI_INCLUDE_DIRS}
+  ${PERSALYS_INCLUDE_DIRS}
   )
 
 ADD_DEFINITIONS(
@@ -67,8 +64,10 @@ ADD_DEFINITIONS(
   ${PYTHON_DEFINITIONS}
   )
 
+FIND_LIBRARY(PERSALYS_view persalysview ${PERSALYS_LIBRARY_DIRS})
+
 ADD_LIBRARY(OPENTURNS ${OPENTURNS_SOURCES})
-TARGET_LINK_LIBRARIES(OPENTURNS ${GUI_LightApp} ${OTGUI_otguiview})
+TARGET_LINK_LIBRARIES(OPENTURNS ${GUI_LightApp} ${PERSALYS_view})
 INSTALL(TARGETS OPENTURNS DESTINATION lib/salome)
 
 SALOME_CONFIGURE_PREPARE(Qt5)

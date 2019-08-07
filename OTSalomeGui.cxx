@@ -14,8 +14,8 @@
 #include "PVViewer_InitSingleton.h"
 #include "PVViewer_ViewModel.h"
 
-#include <otgui/StudyManager.hxx>
-#include <otgui/PVServerManagerSingleton.hxx>
+#include <persalys/StudyManager.hxx>
+#include <persalys/PVServerManagerSingleton.hxx>
 
 #include "OTPVServerManager.hxx"
 
@@ -43,23 +43,23 @@ void OT::SalomeGui::initialize(CAM_Application *app)
 
   SUIT_Desktop *parent(application()->desktop());
   PVViewer_InitSingleton::Init(parent);
-  OTGUI::PVServerManagerSingleton::Init(new OTPVServerManager());
+  PERSALYS::PVServerManagerSingleton::Init(new OTPVServerManager());
 
-  _mainWindow = new OTGUI::MainWidget(parent);
+  _mainWindow = new PERSALYS::MainWidget(parent);
   _mainWindow->setWindowTitle("OpenTURNS window");
 
   // set manager_
-  _manager = new OTGUI::StudyManager(_mainWindow, this);
+  _manager = new PERSALYS::StudyManager(_mainWindow, this);
   connect(_manager, SIGNAL(commandExecutionRequested(QString)),
           this, SLOT(evalPyFile(QString)));
 
   int fileMnu(createMenu("OpenTURNS",-1,-1,10));
   int tbId(createTool(tr("OpenTURNS Toolbar"),QString("OtToolbar")));
-  OTGUI::Actions* actions = _mainWindow->getActions();
+  PERSALYS::Actions* actions = _mainWindow->getActions();
 
   createMenu(actions->newAction(),fileMnu);
   createTool(actions->newAction(),tbId);
-  actions->newAction()->setShortcut(QKeySequence()); // remove OTGUI shortcut
+  actions->newAction()->setShortcut(QKeySequence()); // remove PERSALYS shortcut
 
   createMenu(actions->openAction(),fileMnu);
   createTool(actions->openAction(),tbId);
