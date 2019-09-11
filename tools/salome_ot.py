@@ -21,7 +21,7 @@
 import os
 import py2yacs
 import SalomePyQt
-import otguibase
+import persalys
 
 def loadYacsPyStudy(pyFile,
                     study_name = "OTStudy",
@@ -38,10 +38,11 @@ def loadYacsPyStudy(pyFile,
     with open(pyFile, 'r') as f:
       file_text = f.read()
     sgPyQt = SalomePyQt.SalomePyQt()
-    sgPyQt.activateModule("OpenTURNS")
-    otStudy = otguibase.Study(study_name)
-    otguibase.Study.Add(otStudy)
-    physicalModel = otguibase.YACSPhysicalModel(model_name, file_text)
+    sgPyQt.activateModule("Persalys")
+    otStudy = persalys.Study(study_name)
+    persalys.Study.Add(otStudy)
+    physicalModel = persalys.YACSPhysicalModel(model_name)
+    physicalModel.setContent(file_text)
     otStudy.add(physicalModel)
   return errors
 
@@ -64,14 +65,15 @@ def getYacsPyStudy(pyScript, study_name = None, model_name = None):
       JobParameters from SALOME_Launcher.idl (KERNEL module).
   """
   sgPyQt = SalomePyQt.SalomePyQt()
-  sgPyQt.activateModule("OpenTURNS")
+  sgPyQt.activateModule("Persalys")
   if study_name is None:
     study_name = "MyStudy"
-  study_name = otguibase.Study.GetAvailableName(study_name)
-  otStudy = otguibase.Study(study_name)
-  otguibase.Study.Add(otStudy)
+  study_name = persalys.Study.GetAvailableName(study_name)
+  otStudy = persalys.Study(study_name)
+  persalys.Study.Add(otStudy)
   if model_name is None:
     model_name = "PhysicalModel"
-  physicalModel = otguibase.YACSPhysicalModel(model_name, pyScript)
+  physicalModel = persalys.YACSPhysicalModel(model_name)
+  physicalModel.setContent(pyScript)
   otStudy.add(physicalModel)
   return otStudy, physicalModel

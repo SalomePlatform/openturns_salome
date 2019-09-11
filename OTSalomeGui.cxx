@@ -46,15 +46,15 @@ void OT::SalomeGui::initialize(CAM_Application *app)
   PERSALYS::PVServerManagerSingleton::Init(new OTPVServerManager());
 
   _mainWindow = new PERSALYS::MainWidget(parent);
-  _mainWindow->setWindowTitle("OpenTURNS window");
+  _mainWindow->setWindowTitle("Persalys window");
 
   // set manager_
   _manager = new PERSALYS::StudyManager(_mainWindow, this);
   connect(_manager, SIGNAL(commandExecutionRequested(QString)),
           this, SLOT(evalPyFile(QString)));
 
-  int fileMnu(createMenu("OpenTURNS",-1,-1,10));
-  int tbId(createTool(tr("OpenTURNS Toolbar"),QString("OtToolbar")));
+  int fileMnu(createMenu("Persalys",-1,-1,10));
+  int tbId(createTool(tr("Persalys Toolbar"),QString("OtToolbar")));
   PERSALYS::Actions* actions = _mainWindow->getActions();
 
   createMenu(actions->newAction(),fileMnu);

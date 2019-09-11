@@ -87,7 +87,7 @@
     </message>
     <message>
       <source>OTVIEWER_TITLE</source>
-      <translation>OpenTURNS</translation>
+      <translation>Persalys</translation>
     </message>
 </context>
 </TS>
