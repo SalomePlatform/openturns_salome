@@ -13,7 +13,7 @@
   <parameter name="OPENTURNS" value="%OPENTURNS_ROOT_DIR%/share/salome/resources/openturns" />
  </section>
  <section name="OPENTURNS_help">
-    <parameter name="User's Guide/%1 module/User's Guide" value="%OTGUI_DIR%/share/otgui/doc/html/index.html"/>
+    <parameter name="User's Guide/%1 module/User's Guide" value="%OTGUI_DIR%/share/persalys/doc/html/index.html"/>
  </section>
 </document>
 
