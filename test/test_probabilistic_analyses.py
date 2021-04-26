@@ -87,7 +87,6 @@ myStudy.add(chaos1)
 chaos2 = persalys.FunctionalChaosAnalysis('chaos_2', design_2)
 chaos2.setChaosDegree(2)
 chaos2.setSparseChaos(True)
-chaos2.run()
 myStudy.add(chaos2)
 
 # 2- central tendancy ##
@@ -166,7 +165,6 @@ sobol.setReplicationSize(100)
 sobol.setBlockSize(100)
 sobol.setSeed(2)
 sobol.setInterestVariables(['y0', 'y1'])
-#sobol.run()
 myStudy.add(sobol)
 
 # 4-b SRC ##
