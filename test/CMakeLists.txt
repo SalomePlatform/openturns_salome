@@ -24,6 +24,7 @@ driver_test.py
 test_deterministic_analyses.py
 test_field_analyses.py
 test_probabilistic_analyses.py
+test_basicOT.py
 )
 
 FILE(GLOB COUPLING_FILES

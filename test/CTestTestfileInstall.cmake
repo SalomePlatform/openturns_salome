@@ -42,3 +42,9 @@ SET_TESTS_PROPERTIES(${TEST_NAME} PROPERTIES
                                   TIMEOUT 120
                     )
 
+SET(TEST_NAME ${COMPONENT_NAME}_basicOT)
+ADD_TEST(${TEST_NAME} python3 test_basicOT.py )
+SET_TESTS_PROPERTIES(${TEST_NAME} PROPERTIES
+                                  LABELS "${COMPONENT_NAME};OPENTURNS"
+                                  TIMEOUT 120
+                    )
