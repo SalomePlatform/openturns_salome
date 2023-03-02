@@ -49,4 +49,6 @@ if __name__ == '__main__':
         else:
             f.write(message)
             f.write("probleme!\n")
-    exit()
+    import os
+    pid=os.getpid()
+    os.kill(pid,9)
