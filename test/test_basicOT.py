@@ -8,7 +8,6 @@ class TestOt(unittest.TestCase):
     import otfmi
     import otmixmod
     import otmorris
-    import otpmml
     import otpod
     import otrobopt
     import otsubsetinverse
