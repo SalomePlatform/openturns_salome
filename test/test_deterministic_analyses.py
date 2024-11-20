@@ -153,7 +153,7 @@ except:
 optim = persalys.OptimizationAnalysis('optim', symbolicModel, 'TNC')
 optim.setInterestVariables(['y1'])
 optim.setVariableInputs(['x1', 'x2'])
-optim.setMaximumEvaluationNumber(150)
+optim.setMaximumCallsNumber(150)
 optim.setMaximumAbsoluteError(1e-6)
 optim.setMaximumRelativeError(1e-6)
 optim.setMaximumResidualError(1e-6)
