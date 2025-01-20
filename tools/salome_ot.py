@@ -38,7 +38,9 @@ def loadYacsPyStudy(pyFile,
     with open(pyFile, 'r') as f:
       file_text = f.read()
     sgPyQt = SalomePyQt.SalomePyQt()
-    sgPyQt.activateModule("Persalys")
+    ret = sgPyQt.activateModule("Persalys")
+    if not ret :
+      sgPyQt.activateModule("PERSALYS")
     otStudy = persalys.Study(study_name)
     persalys.Study.Add(otStudy)
     physicalModel = persalys.YACSPhysicalModel(model_name)
@@ -65,7 +67,9 @@ def getYacsPyStudy(pyScript, study_name = None, model_name = None):
       JobParameters from SALOME_Launcher.idl (KERNEL module).
   """
   sgPyQt = SalomePyQt.SalomePyQt()
-  sgPyQt.activateModule("Persalys")
+  ret = sgPyQt.activateModule("Persalys")
+  if not ret :
+    sgPyQt.activateModule("PERSALYS")
   if study_name is None:
     study_name = "MyStudy"
   study_name = persalys.Study.GetAvailableName(study_name)
