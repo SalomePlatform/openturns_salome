@@ -1,5 +1,5 @@
 <!--
-  Copyright (C) 2007-2024  CEA, EDF, OPEN CASCADE
+  Copyright (C) 2007-2025  CEA, EDF, OPEN CASCADE
 
   Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
   CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -28,7 +28,7 @@
  <section name="OPENTURNS" >
   <parameter name="name" value="PERSALYS" />
   <parameter name="icon" value="OT.png" />
-  <parameter name="version" value="9.13.0" />
+  <parameter name="version" value="9.14.0" />
   <parameter name="documentation" value="OPENTURNS_help"/>
  </section>
  <section name="resources" >
