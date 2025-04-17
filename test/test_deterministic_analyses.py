@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 import openturns as ot
-import openturns.testing
 import persalys
 
 ot.RandomGenerator.SetSeed(0)
@@ -71,8 +69,8 @@ couplingDesign.run()
 myStudy.add(couplingDesign)
 
 filename = 'data.csv'
-cDist = ot.ComposedDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
-                                ot.ComposedCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
+cDist = ot.JointDistribution([ot.Normal(), ot.Gumbel(), ot.Normal(), ot.Uniform()],
+                                ot.BlockIndependentCopula([ot.IndependentCopula(2), ot.GumbelCopula()]))
 sample = cDist.getSample(200)
 sample.add([float('nan'), float('inf'), 0., 0.])
 sample.exportToCSVFile(filename, ' ')
@@ -82,7 +80,7 @@ sample.exportToCSVFile(filename, ' ')
 # fixed design ##
 ot.RandomGenerator.SetSeed(0)
 fixedDesign = persalys.FixedDesignOfExperiment('fixedDesign', symbolicModel)
-inputSample = ot.LHSExperiment(ot.ComposedDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
+inputSample = ot.LHSExperiment(ot.JointDistribution([ot.Uniform(0., 10.), ot.Uniform(0., 10.)]), 10).generate()
 inputSample.stack(ot.Sample(10, [0.5]))
 fixedDesign.setOriginalInputSample(inputSample)
 fixedDesign.run()
@@ -112,7 +110,7 @@ onePointDesign.run() #!
 myStudy.add(onePointDesign)
 
 # twoPointsDesign ##
-twoPointsDesign = persalys.GridDesignOfExperiment('twoPointsDesign', pythonModel, [[0.2], [1.2], [-0.2, 1.]])
+twoPointsDesign = persalys.GridDesignOfExperiment('twoPointsDesign', pythonModel, [[0.2], [1.2], [0.2, 1.]])
 twoPointsDesign.setBlockSize(1) #!
 twoPointsDesign.setInterestVariables(interestVariables) #!
 twoPointsDesign.run() #!
@@ -124,13 +122,6 @@ myStudy.add(fixedDataModel)
 dataAnalysis_0 = persalys.DataAnalysis('dataAnalysis_0', fixedDataModel)
 dataAnalysis_0.run()
 myStudy.add(dataAnalysis_0)
-
-# imported DataModel ##
-importDataModel = persalys.DataModel('importDataModel', 'data.csv', [0, 2, 3], [1], ['x_0', 'x_2', 'x_3'], ['x_1'])
-myStudy.add(importDataModel)
-dataAnalysis_1 = persalys.DataAnalysis('dataAnalysis_1', importDataModel)
-dataAnalysis_1.run()
-myStudy.add(dataAnalysis_1)
 
 # model evaluation
 evaluation1 = persalys.ModelEvaluation('evaluation1', symbolicModel)
@@ -187,7 +178,7 @@ calibration.setBootStrapSize(25)
 calibration.setConfidenceIntervalLength(0.99)
 
 optimAlgo = calibration.getOptimizationAlgorithm()
-optimAlgo.setMaximumEvaluationNumber(50)
+optimAlgo.setMaximumCallsNumber(50)
 optimAlgo.setMaximumAbsoluteError(1e-6)
 optimAlgo.setMaximumRelativeError(1e-6)
 optimAlgo.setMaximumResidualError(1e-6)

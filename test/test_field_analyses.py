@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
 import persalys
 
@@ -17,22 +15,22 @@ dist_m = ot.Normal(80, 8)
 m = persalys.Input('m', 80, dist_m, '')
 dist_c = ot.Uniform(0, 30)
 c = persalys.Input('c', 16, dist_c, '')
-z1 = persalys.Output('z1', '')
+z = persalys.Output('z', '')
 z2 = persalys.Output('z2', 'fake output')
 inputs = [z0, v0, m, c]
-outputs = [z1, z2]
+outputs = [z, z2]
 
 # mesh model
-meshModel = persalys.GridMeshModel(ot.Interval(0., 12.), [20])
+meshModel = persalys.GridMeshModel(ot.Interval(0., 12.), [10])
 
 # Python model
-code = 'from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z2 = [2*max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n\n    return z, z2'
+code = 'from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z2 = [ t_i[0] for t_i in t]\n\n    return z, z2'
 PhysicalModel_1 = persalys.PythonFieldModel('PhysicalModel_1', meshModel, inputs, outputs, code)
 Study_0.add(PhysicalModel_1)
 
 # central tendency
 mcAnalysis1 = persalys.FieldMonteCarloAnalysis("mcAnalysis", PhysicalModel_1)
-mcAnalysis1.setMaximumCalls(10)
+mcAnalysis1.setMaximumCalls(5)
 mcAnalysis1.setMaximumElapsedTime(1000)
 mcAnalysis1.setBlockSize(5)
 mcAnalysis1.setSeed(2)

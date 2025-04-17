@@ -10,7 +10,6 @@ class TestOt(unittest.TestCase):
     import otmorris
     import otpod
     import otrobopt
-    import otsubsetinverse
     import otsvm
     import otwrapy
 
