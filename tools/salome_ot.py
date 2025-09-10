@@ -19,7 +19,7 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 import os
-import py2yacs
+from salome.yacs import py2yacs
 import SalomePyQt
 import persalys
 
