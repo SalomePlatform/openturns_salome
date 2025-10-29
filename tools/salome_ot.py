@@ -44,7 +44,7 @@ def loadYacsPyStudy(pyFile,
     otStudy = persalys.Study(study_name)
     persalys.Study.Add(otStudy)
     physicalModel = persalys.YACSPhysicalModel(model_name)
-    physicalModel.setContent(file_text)
+    physicalModel.setCode(file_text)
     otStudy.add(physicalModel)
   return errors
 
@@ -78,6 +78,6 @@ def getYacsPyStudy(pyScript, study_name = None, model_name = None):
   if model_name is None:
     model_name = "PhysicalModel"
   physicalModel = persalys.YACSPhysicalModel(model_name)
-  physicalModel.setContent(pyScript)
+  physicalModel.setCode(pyScript)
   otStudy.add(physicalModel)
   return otStudy, physicalModel
