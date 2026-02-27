@@ -20,6 +20,7 @@ if __name__ == '__main__':
   dir_test = tempfile.mkdtemp(suffix=".persalystest")
   file_test = os.path.join(dir_test,"UnitTestsResult")
   with open(file_test, 'a') as f:
-      suite = unittest.makeSuite(TestOt)
+      suite = unittest.TestSuite()
+      suite.addTest(TestOt('test_importOT'))
       result=unittest.TextTestRunner(f, descriptions=1, verbosity=1).run(suite)
   sys.exit(not result.wasSuccessful())
